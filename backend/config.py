@@ -10,4 +10,8 @@ load_dotenv(os.path.join(basedir, '.env'))
 class Config:
     # Get database URL from environment variable or use default
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'postgresql://postgres:postgres@localhost:5432/postgres')
+    # Get secret key from environment variable or use default
+    SECRET_KEY = os.environ.get('SECRET_KEY', 'test-secret-key')
+    # Get testing flag from environment variable or use default
+    TESTING = os.environ.get('TESTING', 'True') == 'True' 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
