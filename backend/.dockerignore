@@ -1,0 +1,6 @@
+# Example backend/.dockerignore
+
+__pycache__
+*.pyc
+.git
+.venv
