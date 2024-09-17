@@ -9,27 +9,28 @@ history_skills = db.Table('history_skill',
 class User(db.Model):
     __tablename__ = 'users'
 
+    # Existing fields...
     id = db.Column(db.Integer, primary_key=True)
+    oauth_provider = db.Column(db.String(50), nullable=False)
+    oauth_provider_id = db.Column(db.String(128), nullable=False)
     name = db.Column(db.String(128), nullable=False)
-    email = db.Column(db.String(128), unique=True, nullable=False)
+    email = db.Column(db.String(128), nullable=False)
+    is_admin = db.Column(db.Boolean, default=False)
 
-    # One-to-many relationship with History
+    # Relationships
     histories = db.relationship('History', back_populates='user', lazy='dynamic')
-
-    # One-to-many relationship with Skill
     skills = db.relationship('Skill', back_populates='user', lazy='dynamic')
+
+    __table_args__ = (
+        db.UniqueConstraint('oauth_provider', 'oauth_provider_id', name='_oauth_provider_uc'),
+    )
 
     def __repr__(self):
         return f'<User {self.name}>'
 
     def to_dict(self):
-        return {
-            'id': self.id,
-            'name': self.name,
-            'email': self.email,
-            'histories': [history.to_dict() for history in self.histories],
-            'skills': [skill.to_dict() for skill in self.skills]
-        }
+        # Adjust as needed
+        pass
 class Skill(db.Model):
     __tablename__ = 'skills'
 
