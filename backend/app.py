@@ -1,77 +1,38 @@
-# app.py
+from flask import Flask
+from config import Config
+from extensions import db, migrate, ma
+from endpoints import register_blueprints
 
-from flask import Flask, request, jsonify, abort
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
-from flask_cors import CORS
+def create_app(config_class=Config):
+    app = Flask(__name__)
+    app.config.from_object(config_class)
 
-app = Flask(__name__)
-app.config.from_object('config.Config')
-CORS(app)
+    # Initialize extensions with app
+    db.init_app(app)
+    migrate.init_app(app, db)
+    ma.init_app(app)
 
-# Initialize SQLAlchemy
-db = SQLAlchemy(app)
+    # Register Blueprints
+    register_blueprints(app)
 
-# Initialize Flask-Migrate
-migrate = Migrate(app, db)
+    return app
 
-# Import models after initializing db to avoid circular imports
-from models import User
+def register_error_handlers(app):
+    @app.errorhandler(400)
+    def bad_request(error):
+        return {'message': str(error)}, 400
 
-# Define routes and views below
+    @app.errorhandler(404)
+    def not_found(error):
+        return {'message': 'Resource not found'}, 404
 
-@app.route('/')
-def index():
-    return "Hello, World!"
+    @app.errorhandler(422)
+    def unprocessable_entity(error):
+        messages = getattr(error, 'data', {}).get('messages', ['Invalid request'])
+        return {'errors': messages}, 422
 
-@app.route('/users', methods=['POST'])
-def create_user():
-    if not request.json or not 'email' in request.json:
-        abort(400, description="Missing required fields.")
-
-    name = request.json.get('name', '')
-    email = request.json['email']
-    career_history = request.json.get('career_history', '')
-    skills = request.json.get('skills', '')
-
-    new_user = User(name=name, email=email, career_history=career_history, skills=skills)
-    db.session.add(new_user)
-    db.session.commit()
-
-    return jsonify(new_user.to_dict()), 201
-
-@app.route('/users', methods=['GET'])
-def get_users():
-    users = User.query.all()
-    return jsonify([user.to_dict() for user in users]), 200
-
-@app.route('/users/<int:user_id>', methods=['GET'])
-def get_user(user_id):
-    user = User.query.get_or_404(user_id)
-    return jsonify(user.to_dict()), 200
-
-@app.route('/users/<int:user_id>', methods=['PUT'])
-def update_user(user_id):
-    user = User.query.get_or_404(user_id)
-
-    data = request.json
-    if not data:
-        abort(400, description="No input data provided.")
-
-    user.name = data.get('name', user.name)
-    user.email = data.get('email', user.email)
-    user.career_history = data.get('career_history', user.career_history)
-    user.skills = data.get('skills', user.skills)
-
-    db.session.commit()
-    return jsonify(user.to_dict()), 200
-
-@app.route('/users/<int:user_id>', methods=['DELETE'])
-def delete_user(user_id):
-    user = User.query.get_or_404(user_id)
-    db.session.delete(user)
-    db.session.commit()
-    return '', 204
+# Initialize the app
+app = create_app()
 
 if __name__ == '__main__':
     app.run(debug=True)
