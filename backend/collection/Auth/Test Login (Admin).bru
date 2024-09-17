@@ -1,0 +1,21 @@
+meta {
+  name: Test Login (Admin)
+  type: http
+  seq: 2
+}
+
+post {
+  url: 127.0.0.1:8000/auth/test-login
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "email": "admin@example.com"
+  }
+}
