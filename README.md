@@ -9,7 +9,7 @@ CV Blaster is a tool to help users to manage and generate their CV's in a simple
 
 **Client:** NextJS, React, Redux, RTKQuery, TailwindCSS
 
-**Server:** Python, Flask
+**Server:** Python, Flask, SQLAlchemy, Marshmallow
 
 **DB**: Postgres
 

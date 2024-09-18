@@ -20,6 +20,9 @@ def create_history(current_user):
     # Exclude 'user_id' from input data
     json_data.pop('user_id', None)
 
+    # Handle the skills_used field before loading into schema
+    skills_data = json_data.pop('skills_used', [])
+
     try:
         history_data = history_schema.load(json_data)
     except ValidationError as err:
@@ -29,24 +32,17 @@ def create_history(current_user):
     history_data.user_id = current_user.id
 
     # Handle the skills_used field
-    skills_data = json_data.get('skills_used', [])
     skills = []
-    for skill_data in skills_data:
-        skill_name = skill_data.get('skill')
+    for skill_item in skills_data:
+        skill_name = skill_item.get('name')
         if not skill_name:
             continue  # Skip if no skill name provided
 
-        # Look for the skill associated with the current user
-        skill = Skill.query.filter_by(skill=skill_name, user_id=current_user.id).first()
+        # Look for the skill by name
+        skill = Skill.query.filter_by(name=skill_name).first()
         if not skill:
-            # Optionally, prevent creating new skills here or create them
-            skill = Skill(
-                skill=skill_name,
-                user_id=current_user.id,
-                experience=skill_data.get('experience'),
-                first_used_date=skill_data.get('first_used_date'),
-                last_used_date=skill_data.get('last_used_date')
-            )
+            # Create new skill
+            skill = Skill(name=skill_name)
             db.session.add(skill)
             db.session.flush()  # Flush to get the ID
 
@@ -99,31 +95,27 @@ def update_history(current_user, history_id):
     # Exclude 'user_id' from input data
     json_data.pop('user_id', None)
 
+    # Handle the skills_used field separately
+    skills_data = json_data.pop('skills_used', None)
+
     try:
         history = history_schema.load(json_data, instance=history, partial=True)
     except ValidationError as err:
         return jsonify({'errors': err.messages}), 422
 
-    # Handle updating skills
-    if 'skills_used' in json_data:
-        skills_data = json_data['skills_used']
+    # Handle updating skills if provided
+    if skills_data is not None:
         skills = []
-        for skill_data in skills_data:
-            skill_name = skill_data.get('skill')
+        for skill_item in skills_data:
+            skill_name = skill_item.get('name')
             if not skill_name:
                 continue  # Skip if no skill name provided
 
-            # Look for the skill associated with the current user
-            skill = Skill.query.filter_by(skill=skill_name, user_id=current_user.id).first()
+            # Look for the skill by name
+            skill = Skill.query.filter_by(name=skill_name).first()
             if not skill:
-                # Optionally, prevent creating new skills here or create them
-                skill = Skill(
-                    skill=skill_name,
-                    user_id=current_user.id,
-                    experience=skill_data.get('experience'),
-                    first_used_date=skill_data.get('first_used_date'),
-                    last_used_date=skill_data.get('last_used_date')
-                )
+                # Create new skill
+                skill = Skill(name=skill_name)
                 db.session.add(skill)
                 db.session.flush()  # Flush to get the ID
 
