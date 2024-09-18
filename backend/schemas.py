@@ -1,5 +1,5 @@
 from extensions import db, ma
-from models import User, Skill, History
+from models import User, Skill, UserSkill, History
 from marshmallow import fields, validates, ValidationError
 
 from marshmallow import fields
@@ -23,7 +23,7 @@ class AdminUserSchema(ma.SQLAlchemyAutoSchema):
         model = User
         load_instance = True
         exclude = ('oauth_provider_id',)
-class SkillSchema(SQLAlchemyAutoSchema):
+class SkillSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Skill
         load_instance = True
@@ -55,5 +55,7 @@ admin_user_schema = AdminUserSchema()
 admin_users_schema = AdminUserSchema(many=True)
 skill_schema = SkillSchema()
 skills_schema = SkillSchema(many=True)
+user_skill_schema = UserSkillSchema()
+user_skills_schema = UserSkillSchema(many=True)
 history_schema = HistorySchema()
 histories_schema = HistorySchema(many=True)

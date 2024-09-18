@@ -1,7 +1,7 @@
 from extensions import db
 
 # Association table between History and Skill
-history_skills = db.Table('history_skills',
+histories_skills = db.Table('histories_skills',
     db.Column('history_id', db.Integer, db.ForeignKey('histories.id'), primary_key=True),
     db.Column('skill_id', db.Integer, db.ForeignKey('skills.id'), primary_key=True)
 )
