@@ -10,8 +10,11 @@ users_bp = Blueprint('users_bp', __name__)
 @users_bp.route('/me', methods=['GET'])
 @token_required
 def get_current_user(current_user):
-    result = user_schema.dump(current_user)
-    return jsonify(result), 200
+    try:
+        result = user_schema.dump(current_user)
+        return jsonify(result), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 @users_bp.route('/', methods=['GET'])
 @token_required

@@ -15,9 +15,12 @@ def token_required(f):
         if not token:
             return jsonify({'message': 'Token is missing!'}), 401
 
+        print(f"Received token: {token}")  # Log the received token for debugging
+
         try:
-            data = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=['HS256'])
-            user_id = data.get('id')
+            # Decode the JWT using the correct secret
+            data = jwt.decode(token, current_app.config['NEXTAUTH_SECRET'], algorithms=['HS256'])
+            user_id = data.get('id')  # Ensure this matches the 'id' claim in the JWT
             if not user_id:
                 return jsonify({'message': 'Token is invalid!'}), 401
 

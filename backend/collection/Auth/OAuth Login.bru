@@ -1,0 +1,27 @@
+meta {
+  name: OAuth Login
+  type: http
+  seq: 3
+}
+
+post {
+  url: 127.0.0.1:8000/auth/oauth
+  body: json
+  auth: bearer
+}
+
+headers {
+  Content-Type: application/json
+}
+
+auth:bearer {
+  token: ImLhKI7aEt+MobL/LQtu4FKA39dOpWo+jdx8b1A/KXc=
+}
+
+body:json {
+  {
+    "email": "alex@alexfoxleigh.com",
+    "provider": "github",
+    "provider_id": "github_user_id"
+  }
+}

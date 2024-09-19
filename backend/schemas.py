@@ -2,12 +2,20 @@ from extensions import db, ma
 from models import User, Skill, UserSkill, History, OAuthProvider
 from marshmallow import fields, validates, ValidationError
 
-from marshmallow import fields
-
 class OAuthProviderSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = OAuthProvider
         load_instance = True
+        exclude = ('user',)  # Explicitly exclude the 'user' field
+class UserSkillSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = UserSkill
+        load_instance = True
+        include_fk = True
+        exclude = ('user',)  # Exclude the 'user' field
+
+    skill = fields.Nested('SkillSchema', exclude=('user_skills', 'histories'))
+    user_id = fields.Int(dump_only=True)  # Prevent clients from setting user_id
 
 class UserSchema(ma.SQLAlchemyAutoSchema):
     histories = fields.Nested('HistorySchema', many=True, exclude=('user',))
@@ -17,31 +25,27 @@ class UserSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = User
         load_instance = True
-        exclude = ('is_admin',)  # Exclude is_admin by default
 
-# Create a separate schema for admin users that includes the is_admin field
+    @validates('email')
+    def validate_email(self, value):
+        if not value or '@' not in value:
+            raise ValidationError("Invalid email address.")
+
 class AdminUserSchema(ma.SQLAlchemyAutoSchema):
     histories = fields.Nested('HistorySchema', many=True, exclude=('user',))
     user_skills = fields.Nested('UserSkillSchema', many=True, exclude=('user',))
     oauth_providers = fields.Nested(OAuthProviderSchema, many=True, exclude=('user',))
-    
+    is_admin = fields.Boolean()  # Include the is_admin field
+
     class Meta:
         model = User
-        load_instance = True    
+        load_instance = True
+
 class SkillSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Skill
         load_instance = True
-        exclude = ('histories', 'user_skills')
-
-class UserSkillSchema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model = UserSkill
-        load_instance = True
-        include_fk = True
-
-    skill = fields.Nested('SkillSchema', exclude=('user_skills', 'histories'))
-    user_id = fields.Int(dump_only=True)  # Prevent clients from setting user_id
+        exclude = ('histories', 'user_skills')  # Exclude relationships to prevent circular refs
 
 class HistorySchema(ma.SQLAlchemyAutoSchema):
     skills_used = fields.Nested('SkillSchema', many=True, exclude=('histories', 'user_skills'))
@@ -49,11 +53,13 @@ class HistorySchema(ma.SQLAlchemyAutoSchema):
     user_id = fields.Int(dump_only=True)  # Prevent client from setting user_id directly
     start_date = fields.Date(format='%Y-%m-%d')
     end_date = fields.Date(format='%Y-%m-%d')
+
     class Meta:
         model = History
         load_instance = True
         include_fk = True
 
+# Schema instances
 user_schema = UserSchema()
 users_schema = UserSchema(many=True)
 admin_user_schema = AdminUserSchema()

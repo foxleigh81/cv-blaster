@@ -14,14 +14,10 @@ class User(db.Model):
     is_admin = db.Column(db.Boolean, default=False)  # Retaining the is_admin flag
 
     # Relationships
-    histories = db.relationship('History', back_populates='user', lazy='dynamic')
-    user_skills = db.relationship('UserSkill', back_populates='user', cascade='all, delete-orphan')
-    oauth_providers = db.relationship('OAuthProvider', back_populates='user', cascade='all, delete-orphan')
+    histories = db.relationship('History', back_populates='user', lazy='select')
+    user_skills = db.relationship('UserSkill', back_populates='user', cascade='all, delete-orphan', lazy='select')
+    oauth_providers = db.relationship('OAuthProvider', back_populates='user', cascade='all, delete-orphan', lazy='select')
     
-    __table_args__ = (
-        db.UniqueConstraint('email'),
-    )
-
     def __repr__(self):
         return f'<User {self.email}>'
 
@@ -51,8 +47,9 @@ class Skill(db.Model):
     user_skills = db.relationship('UserSkill', back_populates='skill', cascade='all, delete-orphan')
     histories = db.relationship(
         'History',
-        secondary='histories_skills',
-        back_populates='skills_used'
+        secondary=histories_skills,
+        back_populates='skills_used',
+        lazy='select'
     )
 
     def __repr__(self):
@@ -86,7 +83,7 @@ class History(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
     # Many-to-many relationship with Skill
-    skills_used = db.relationship('Skill', secondary=histories_skills, back_populates='histories')
+    skills_used = db.relationship('Skill', secondary=histories_skills, back_populates='histories', lazy='select')
 
     # Relationship back to User
     user = db.relationship('User', back_populates='histories')
