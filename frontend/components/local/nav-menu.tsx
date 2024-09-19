@@ -12,19 +12,19 @@ export default function NavMenu() {
         {session ? (
           <>
             <li>
-              <Link href="/dashboard">Dashboard</Link>
+              <Link className="hover:underline underline-offset-8" href="/dashboard">Dashboard</Link>
             </li>
             <li>
-              <button onClick={() => signOut()}>Sign out</button>
+              <button className="hover:underline underline-offset-8" onClick={() => signOut()}>Sign out</button>
             </li>
           </>
         ) : (
           <>
             <li>
-              <button onClick={() => signIn()}>Sign in</button>
+              <button className="hover:underline underline-offset-8" onClick={() => signIn()}>Sign in</button>
             </li>
             <li>
-              <Link href="/register">Register</Link>
+              <Link className="hover:underline underline-offset-8" href="/register">Register</Link>
             </li>
           </>
         )}
