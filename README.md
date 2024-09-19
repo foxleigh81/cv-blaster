@@ -1,4 +1,6 @@
 
+![CV Blaster Logo](/frontend/public//cv-blaster-logo-small.png)
+
 # CV Blaster
 
 CV Blaster is a tool to help users to manage and generate their CV's in a simple application.
