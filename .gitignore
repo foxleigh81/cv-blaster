@@ -108,6 +108,7 @@ frontend/out/
 # Build artifacts
 frontend/build/
 frontend/dist/
+frontend/tsconfig.tsbuildinfo
 
 # Logs
 frontend/npm-debug.log*
