@@ -9,29 +9,37 @@ histories_skills = db.Table('histories_skills',
 class User(db.Model):
     __tablename__ = 'users'
 
-    # Existing fields...
     id = db.Column(db.Integer, primary_key=True)
-    oauth_provider = db.Column(db.String(50), nullable=False)
-    oauth_provider_id = db.Column(db.String(128), nullable=False)
-    name = db.Column(db.String(128), nullable=False)
-    email = db.Column(db.String(128), nullable=False)
-    is_admin = db.Column(db.Boolean, default=False)
+    email = db.Column(db.String(128), unique=True, nullable=False)  # Only storing email
+    is_admin = db.Column(db.Boolean, default=False)  # Retaining the is_admin flag
 
     # Relationships
     histories = db.relationship('History', back_populates='user', lazy='dynamic')
     user_skills = db.relationship('UserSkill', back_populates='user', cascade='all, delete-orphan')
-
+    oauth_providers = db.relationship('OAuthProvider', back_populates='user', cascade='all, delete-orphan')
+    
     __table_args__ = (
-        db.UniqueConstraint('oauth_provider', 'oauth_provider_id', name='_oauth_provider_uc'),
+        db.UniqueConstraint('email'),
     )
 
     def __repr__(self):
-        return f'<User {self.name}>'
+        return f'<User {self.email}>'
 
-    def to_dict(self):
-        # Adjust as needed
-        pass
-# models.py
+class OAuthProvider(db.Model):
+    __tablename__ = 'oauth_providers'
+
+    id = db.Column(db.Integer, primary_key=True)
+    provider_name = db.Column(db.String(50), nullable=False)  # e.g., 'google', 'github'
+    provider_id = db.Column(db.String(128), nullable=False)  # The provider-specific ID
+
+    # Foreign key to the User table
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+
+    # Relationship back to the User model
+    user = db.relationship('User', back_populates='oauth_providers')
+
+    def __repr__(self):
+        return f'<OAuthProvider {self.provider_name} for User {self.user_id}>'
 
 class Skill(db.Model):
     __tablename__ = 'skills'
