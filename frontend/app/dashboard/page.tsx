@@ -32,9 +32,12 @@ export default async function Dashboard() {
     const user = await getUser();
     return (
       <div>
-        <h1>Dashboard</h1>
-        <p>Welcome, {session.user.name}!</p>
-        { user.is_admin && <p>I am at your service, my lord! 👑</p> }
+        <h1 className="text-3xl font-bold mb-3">Dashboard</h1>
+        <p className="mb-3">Welcome, <strong className="text-indigo-500">{session.user.name}</strong>!</p>
+        { user.is_admin && <p> Ooh, you are an <strong className="text-red-500">admin</strong>! I am at your service, my lord! 👑</p> }
+        <pre className="mt-3 p-5 bg-slate-400 rounded-lg">
+          {JSON.stringify(user, null, 2)}
+        </pre>
       </div>
     );
   } catch (error) {

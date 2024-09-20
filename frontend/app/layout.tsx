@@ -4,8 +4,9 @@ import SessionProvider from "@/lib/providers/session-provider";
 import { getServerSession } from "next-auth";
 
 import "./globals.css";
-import { Card } from "@/components/ui/card";
+
 import NavMenu from "@/components/local/nav-menu";
+import Image from "next/image";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -40,7 +41,7 @@ export default async function RootLayout({
         <div className="grid grid-rows-[auto_1fr_20px] min-h-screen gap-1 font-[family-name:var(--font-geist-sans)]">
           <header className="flex flex-col w-full gap-4 row-start-1 items-start sm:items-start bg-violet-800 text-white p-5">
             <div className="grid grid-cols-2 w-full">
-              <h1 className="text-3xl sm:text-4xl font-bold">CV Blaster!</h1>
+              <h1 className="flex flex-row place-items-center gap-2 text-3xl sm:text-4xl font-bold"><Image src="/cv-blaster-logo.svg" width={90} height={90} alt="CV Blaster logo" />CV Blaster!</h1>
               <NavMenu />
             </div>
             <p className="text-lg text-center sm:text-left">
