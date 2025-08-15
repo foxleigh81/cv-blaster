@@ -6,6 +6,8 @@ import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { ProfileModule } from './profile/profile.module';
+import { CVTemplatesModule } from './cv-templates/cv-templates.module';
+import { CVModule } from './cv/cv.module';
 
 @Module({
   imports: [
@@ -17,6 +19,8 @@ import { ProfileModule } from './profile/profile.module';
     AuthModule,
     UsersModule,
     ProfileModule,
+    CVTemplatesModule,
+    CVModule,
   ],
   controllers: [AppController],
   providers: [AppService],

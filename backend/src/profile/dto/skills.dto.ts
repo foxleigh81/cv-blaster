@@ -5,7 +5,7 @@ import { Type } from 'class-transformer';
 export class CreateSkillDto {
   @ApiProperty({ description: 'Skill name' })
   @IsString()
-  name: string;
+  name!: string;
 
   @ApiPropertyOptional({ description: 'Skill category (e.g., Programming, Design, Management)' })
   @IsOptional()
@@ -23,7 +23,7 @@ export class UpdateSkillDto extends PartialType(CreateSkillDto) {}
 export class AddUserSkillDto {
   @ApiProperty({ description: 'Skill ID to add to user' })
   @IsString()
-  skill_id: string;
+  skill_id!: string;
 
   @ApiProperty({ 
     description: 'Proficiency level (1-5 scale)',
@@ -34,7 +34,7 @@ export class AddUserSkillDto {
   @IsNumber()
   @Min(1)
   @Max(5)
-  proficiency: number;
+  proficiency!: number;
 
   @ApiPropertyOptional({ 
     description: 'Years of experience with this skill',
@@ -49,7 +49,7 @@ export class AddUserSkillDto {
 export class CreateUserSkillDto {
   @ApiProperty({ description: 'Skill name' })
   @IsString()
-  skill_name: string;
+  skill_name!: string;
 
   @ApiPropertyOptional({ description: 'Skill category' })
   @IsOptional()
@@ -65,7 +65,7 @@ export class CreateUserSkillDto {
   @IsNumber()
   @Min(1)
   @Max(5)
-  proficiency: number;
+  proficiency!: number;
 
   @ApiPropertyOptional({ 
     description: 'Years of experience',
@@ -98,10 +98,10 @@ export class UpdateUserSkillDto {
 
 export class SkillResponseDto {
   @ApiProperty({ description: 'Skill ID' })
-  id: string;
+  id!: string;
 
   @ApiProperty({ description: 'Skill name' })
-  name: string;
+  name!: string;
 
   @ApiPropertyOptional({ description: 'Skill category' })
   category?: string;
@@ -110,21 +110,21 @@ export class SkillResponseDto {
   description?: string;
 
   @ApiProperty({ description: 'Creation timestamp' })
-  created_at: string;
+  created_at!: string;
 
   @ApiProperty({ description: 'Last update timestamp' })
-  updated_at: string;
+  updated_at!: string;
 }
 
 export class UserSkillResponseDto {
   @ApiProperty({ description: 'User skill relationship ID' })
-  skill_id: string;
+  skill_id!: string;
 
   @ApiProperty({ description: 'Skill details' })
-  skill: SkillResponseDto;
+  skill!: SkillResponseDto;
 
   @ApiProperty({ description: 'Proficiency level (1-5)' })
-  proficiency: number;
+  proficiency!: number;
 
   @ApiPropertyOptional({ description: 'Years of experience' })
   years?: number;
@@ -136,5 +136,5 @@ export class BulkSkillsDto {
     type: [CreateUserSkillDto]
   })
   @Type(() => CreateUserSkillDto)
-  skills: CreateUserSkillDto[];
+  skills!: CreateUserSkillDto[];
 }

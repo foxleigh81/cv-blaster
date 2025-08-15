@@ -1,4 +1,5 @@
 import { IsString, IsDateString, IsBoolean, IsOptional, IsObject, MaxLength } from 'class-validator';
+import { EmploymentAchievement } from '../../types';
 import { ApiProperty, ApiPropertyOptional, PartialType } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 
@@ -6,16 +7,16 @@ export class CreateEmploymentDto {
   @ApiProperty({ description: 'Company name' })
   @IsString()
   @MaxLength(255)
-  company: string;
+  company!: string;
 
   @ApiProperty({ description: 'Position/job title' })
   @IsString()
   @MaxLength(255)
-  position: string;
+  position!: string;
 
   @ApiProperty({ description: 'Employment start date', example: '2023-01-15' })
   @IsDateString()
-  start_date: string;
+  start_date!: string;
 
   @ApiPropertyOptional({ description: 'Employment end date', example: '2023-12-15' })
   @IsOptional()
@@ -38,41 +39,41 @@ export class CreateEmploymentDto {
   })
   @IsOptional()
   @IsObject()
-  achievements?: Record<string, any>;
+  achievements?: EmploymentAchievement[];
 }
 
 export class UpdateEmploymentDto extends PartialType(CreateEmploymentDto) {}
 
 export class EmploymentResponseDto {
   @ApiProperty({ description: 'Employment record ID' })
-  id: string;
+  id!: string;
 
   @ApiProperty({ description: 'Company name' })
-  company: string;
+  company!: string;
 
   @ApiProperty({ description: 'Position/job title' })
-  position: string;
+  position!: string;
 
   @ApiProperty({ description: 'Employment start date' })
-  start_date: Date;
+  start_date!: Date;
 
   @ApiPropertyOptional({ description: 'Employment end date' })
   end_date?: Date;
 
   @ApiProperty({ description: 'Is current job' })
-  current: boolean;
+  current!: boolean;
 
   @ApiPropertyOptional({ description: 'Job description' })
   description?: string;
 
   @ApiPropertyOptional({ description: 'Key achievements' })
-  achievements?: Record<string, any>;
+  achievements?: EmploymentAchievement[];
 
   @ApiProperty({ description: 'Creation timestamp' })
-  created_at: Date;
+  created_at!: Date;
 
   @ApiProperty({ description: 'Last update timestamp' })
-  updated_at: Date;
+  updated_at!: Date;
 }
 
 export class BulkEmploymentDto {
@@ -81,5 +82,5 @@ export class BulkEmploymentDto {
     type: [CreateEmploymentDto]
   })
   @Type(() => CreateEmploymentDto)
-  employment: CreateEmploymentDto[];
+  employment!: CreateEmploymentDto[];
 }

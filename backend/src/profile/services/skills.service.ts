@@ -171,7 +171,7 @@ export class SkillsService {
         results.push(userSkill);
       } catch (error) {
         // Continue with other skills even if one fails
-        console.warn(`Failed to create skill ${skillData.skill_name}:`, error.message);
+        console.warn(`Failed to create skill ${skillData.skill_name}:`, (error as any).message || error);
       }
     }
 

@@ -50,10 +50,10 @@ export class EmploymentService {
   ): Promise<Employment> {
     const employment = await this.findOne(id, userId);
 
-    const updateData: any = {
-      ...updateEmploymentDto,
+    const { start_date, end_date, ...rest } = updateEmploymentDto;
+    const updateData: Partial<Employment> = {
+      ...rest,
     };
-
     if (updateEmploymentDto.start_date !== undefined) {
       updateData.start_date = new Date(updateEmploymentDto.start_date);
     }
@@ -61,7 +61,7 @@ export class EmploymentService {
     if (updateEmploymentDto.end_date !== undefined) {
       updateData.end_date = updateEmploymentDto.end_date 
         ? new Date(updateEmploymentDto.end_date) 
-        : null;
+        : undefined;
     }
 
     Object.assign(employment, updateData);

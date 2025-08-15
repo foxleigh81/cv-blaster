@@ -7,14 +7,14 @@ export class CreateUserPreferencesDto {
     default: true 
   })
   @IsBoolean()
-  email_notifications: boolean;
+  email_notifications!: boolean;
 
   @ApiProperty({ 
     description: 'Whether marketing emails are enabled',
     default: false 
   })
   @IsBoolean()
-  marketing_emails: boolean;
+  marketing_emails!: boolean;
 
   @ApiPropertyOptional({ 
     description: 'Preferred language',
@@ -37,7 +37,7 @@ export class CreateUserPreferencesDto {
   })
   @IsOptional()
   @IsObject()
-  custom_settings?: Record<string, any>;
+  custom_settings?: { [key: string]: string | number | boolean };
 }
 
 export class UpdateUserPreferencesDto {
@@ -64,5 +64,5 @@ export class UpdateUserPreferencesDto {
   @ApiPropertyOptional({ description: 'Additional custom preferences' })
   @IsOptional()
   @IsObject()
-  custom_settings?: Record<string, any>;
+  custom_settings?: { [key: string]: string | number | boolean };
 }

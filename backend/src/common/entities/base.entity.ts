@@ -7,13 +7,13 @@ import {
 
 export abstract class BaseEntity {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @CreateDateColumn({ type: 'timestamp' })
-  created_at: Date;
+  created_at!: Date;
 
   @UpdateDateColumn({ type: 'timestamp' })
-  updated_at: Date;
+  updated_at!: Date;
 
   @DeleteDateColumn({ type: 'timestamp', nullable: true })
   deleted_at?: Date;

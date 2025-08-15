@@ -52,20 +52,20 @@ export class CertificatesService {
   ): Promise<Certificate> {
     const certificate = await this.findOne(id, userId);
 
-    const updateData: any = {
-      ...updateCertificateDto,
+    const { issue_date, expiry_date, ...rest } = updateCertificateDto;
+    const updateData: Partial<Certificate> = {
+      ...rest,
     };
-
     if (updateCertificateDto.issue_date !== undefined) {
       updateData.issue_date = updateCertificateDto.issue_date 
         ? new Date(updateCertificateDto.issue_date) 
-        : null;
+        : undefined;
     }
 
     if (updateCertificateDto.expiry_date !== undefined) {
       updateData.expiry_date = updateCertificateDto.expiry_date 
         ? new Date(updateCertificateDto.expiry_date) 
-        : null;
+        : undefined;
     }
 
     Object.assign(certificate, updateData);

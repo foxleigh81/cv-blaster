@@ -5,27 +5,27 @@ import { User } from '../../users/entities/user.entity';
 @Entity('education')
 export class Education extends BaseEntity {
   @Column({ type: 'uuid' })
-  user_id: string;
+  user_id!: string;
 
   @Column()
-  institution: string;
+  institution!: string;
 
   @Column()
-  degree: string;
+  degree!: string;
 
   @Column({ nullable: true })
-  field: string;
+  field!: string;
 
   @Column({ type: 'date', nullable: true })
-  graduation_date: Date;
+  graduation_date!: Date;
 
   @Column({ type: 'text', nullable: true })
-  description: string;
+  description!: string;
 
   @Column({ type: 'decimal', precision: 3, scale: 2, nullable: true })
-  gpa: number;
+  gpa!: number;
 
   @ManyToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
-  user: User;
+  user!: User;
 }

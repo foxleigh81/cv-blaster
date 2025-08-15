@@ -5,27 +5,27 @@ import { User } from './user.entity';
 @Entity('profiles')
 export class Profile extends BaseEntity {
   @Column({ type: 'uuid' })
-  user_id: string;
+  user_id!: string;
 
   @Column({ type: 'text', nullable: true })
-  bio: string;
+  bio!: string;
 
   @Column({ nullable: true, length: 50 })
-  phone: string;
+  phone!: string;
 
   @Column({ nullable: true })
-  location: string;
+  location!: string;
 
   @Column({ nullable: true })
-  website: string;
+  website!: string;
 
   @Column({ nullable: true })
-  linkedin: string;
+  linkedin!: string;
 
   @Column({ nullable: true })
-  github: string;
+  github!: string;
 
   @OneToOne(() => User, (user) => user.profile, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
-  user: User;
+  user!: User;
 }

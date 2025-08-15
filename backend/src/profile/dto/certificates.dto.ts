@@ -6,7 +6,7 @@ export class CreateCertificateDto {
   @ApiProperty({ description: 'Certificate name/title' })
   @IsString()
   @MaxLength(255)
-  name: string;
+  name!: string;
 
   @ApiPropertyOptional({ description: 'Certificate issuing organization' })
   @IsOptional()
@@ -45,10 +45,10 @@ export class UpdateCertificateDto extends PartialType(CreateCertificateDto) {}
 
 export class CertificateResponseDto {
   @ApiProperty({ description: 'Certificate ID' })
-  id: string;
+  id!: string;
 
   @ApiProperty({ description: 'Certificate name/title' })
-  name: string;
+  name!: string;
 
   @ApiPropertyOptional({ description: 'Certificate issuing organization' })
   issuer?: string;
@@ -69,10 +69,10 @@ export class CertificateResponseDto {
   description?: string;
 
   @ApiProperty({ description: 'Creation timestamp' })
-  created_at: string;
+  created_at!: string;
 
   @ApiProperty({ description: 'Last update timestamp' })
-  updated_at: string;
+  updated_at!: string;
 }
 
 export class BulkCertificatesDto {
@@ -81,5 +81,5 @@ export class BulkCertificatesDto {
     type: [CreateCertificateDto]
   })
   @Type(() => CreateCertificateDto)
-  certificates: CreateCertificateDto[];
+  certificates!: CreateCertificateDto[];
 }

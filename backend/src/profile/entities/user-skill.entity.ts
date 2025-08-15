@@ -5,22 +5,22 @@ import { Skill } from './skill.entity';
 @Entity('user_skills')
 export class UserSkill {
   @PrimaryColumn({ type: 'uuid' })
-  user_id: string;
+  user_id!: string;
 
   @PrimaryColumn({ type: 'uuid' })
-  skill_id: string;
+  skill_id!: string;
 
   @Column({ type: 'smallint', default: 1 })
-  proficiency: number; // 1-5 scale
+  proficiency!: number; // 1-5 scale
 
   @Column({ type: 'smallint', nullable: true })
-  years: number;
+  years!: number;
 
   @ManyToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
-  user: User;
+  user!: User;
 
   @ManyToOne(() => Skill, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'skill_id' })
-  skill: Skill;
+  skill!: Skill;
 }

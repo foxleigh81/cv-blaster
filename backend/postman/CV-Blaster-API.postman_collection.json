@@ -1,0 +1,648 @@
+{
+  "info": {
+    "name": "CV Blaster API",
+    "description": "Complete API collection for CV Blaster backend",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{access_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5001/api",
+      "type": "string"
+    },
+    {
+      "key": "access_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "refresh_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "user_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "cv_id",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["health"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "OAuth Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200 || pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('access_token', response.access_token);",
+                  "    pm.collectionVariables.set('refresh_token', response.refresh_token);",
+                  "    pm.collectionVariables.set('user_id', response.user.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test@example.com\",\n  \"name\": \"Test User\",\n  \"oauth_provider\": \"github\",\n  \"oauth_id\": \"github_test_123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/oauth",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "oauth"]
+            }
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('access_token', response.access_token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh_token\": \"{{refresh_token}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/refresh",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "refresh"]
+            }
+          }
+        },
+        {
+          "name": "Get Current User",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "me"]
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/auth/logout",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "logout"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "User Profile",
+      "item": [
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "profile"]
+            }
+          }
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bio\": \"Experienced software developer with a passion for creating innovative solutions\",\n  \"phone\": \"+1-555-0123\",\n  \"location\": \"San Francisco, CA\",\n  \"website\": \"https://johndoe.dev\",\n  \"linkedin\": \"https://linkedin.com/in/johndoe\",\n  \"github\": \"https://github.com/johndoe\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "profile"]
+            }
+          }
+        },
+        {
+          "name": "Get Preferences",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/preferences",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "preferences"]
+            }
+          }
+        },
+        {
+          "name": "Update Preferences",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"theme\": \"dark\",\n  \"language\": \"en\",\n  \"email_notifications\": true,\n  \"weekly_summary\": false\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/preferences",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "preferences"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Employment",
+      "item": [
+        {
+          "name": "List Employment",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/profile/employment",
+              "host": ["{{baseUrl}}"],
+              "path": ["profile", "employment"]
+            }
+          }
+        },
+        {
+          "name": "Create Employment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"company\": \"Tech Corp\",\n  \"position\": \"Senior Software Engineer\",\n  \"start_date\": \"2020-01-15\",\n  \"end_date\": null,\n  \"current\": true,\n  \"description\": \"Leading development of cloud-native applications using microservices architecture\",\n  \"achievements\": [\n    \"Reduced API response time by 50%\",\n    \"Led team of 5 developers\",\n    \"Implemented CI/CD pipeline\"\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/profile/employment",
+              "host": ["{{baseUrl}}"],
+              "path": ["profile", "employment"]
+            }
+          }
+        },
+        {
+          "name": "Update Employment",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"position\": \"Lead Software Engineer\",\n  \"achievements\": [\n    \"Reduced API response time by 50%\",\n    \"Led team of 8 developers\",\n    \"Implemented CI/CD pipeline\",\n    \"Mentored junior developers\"\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/profile/employment/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["profile", "employment", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Education",
+      "item": [
+        {
+          "name": "List Education",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/profile/education",
+              "host": ["{{baseUrl}}"],
+              "path": ["profile", "education"]
+            }
+          }
+        },
+        {
+          "name": "Create Education",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"institution\": \"Stanford University\",\n  \"degree\": \"Master of Science\",\n  \"field\": \"Computer Science\",\n  \"graduation_date\": \"2019-06-15\",\n  \"gpa\": 3.9,\n  \"description\": \"Specialized in Machine Learning and Distributed Systems\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/profile/education",
+              "host": ["{{baseUrl}}"],
+              "path": ["profile", "education"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Skills",
+      "item": [
+        {
+          "name": "List Skills",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/profile/skills",
+              "host": ["{{baseUrl}}"],
+              "path": ["profile", "skills"]
+            }
+          }
+        },
+        {
+          "name": "Add Skill",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"TypeScript\",\n  \"category\": \"Programming\",\n  \"proficiency\": 5,\n  \"years\": 4\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/profile/skills",
+              "host": ["{{baseUrl}}"],
+              "path": ["profile", "skills"]
+            }
+          }
+        },
+        {
+          "name": "Bulk Add Skills",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"skills\": [\n    {\n      \"name\": \"React\",\n      \"category\": \"Frontend\",\n      \"proficiency\": 5,\n      \"years\": 5\n    },\n    {\n      \"name\": \"Node.js\",\n      \"category\": \"Backend\",\n      \"proficiency\": 4,\n      \"years\": 4\n    },\n    {\n      \"name\": \"PostgreSQL\",\n      \"category\": \"Database\",\n      \"proficiency\": 4,\n      \"years\": 3\n    },\n    {\n      \"name\": \"Docker\",\n      \"category\": \"DevOps\",\n      \"proficiency\": 3,\n      \"years\": 2\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/profile/skills/bulk",
+              "host": ["{{baseUrl}}"],
+              "path": ["profile", "skills", "bulk"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "CV Templates",
+      "item": [
+        {
+          "name": "List Templates",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/cv-templates",
+              "host": ["{{baseUrl}}"],
+              "path": ["cv-templates"]
+            }
+          }
+        },
+        {
+          "name": "Get Template",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/cv-templates/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["cv-templates", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Seed Templates",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/cv-templates/seed",
+              "host": ["{{baseUrl}}"],
+              "path": ["cv-templates", "seed"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "CV Management",
+      "item": [
+        {
+          "name": "List My CVs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/cv",
+              "host": ["{{baseUrl}}"],
+              "path": ["cv"]
+            }
+          }
+        },
+        {
+          "name": "Create CV from Profile",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('cv_id', response.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"My Professional CV\",\n  \"template_id\": null\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/cv/from-profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["cv", "from-profile"]
+            }
+          }
+        },
+        {
+          "name": "Get CV",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/cv/{{cv_id}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["cv", "{{cv_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Update CV",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Senior Developer CV\",\n  \"settings\": {\n    \"color_scheme\": {\n      \"primary\": \"#2563eb\",\n      \"secondary\": \"#64748b\",\n      \"accent\": \"#0ea5e9\"\n    },\n    \"font\": {\n      \"heading\": \"Inter\",\n      \"body\": \"Open Sans\"\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/cv/{{cv_id}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["cv", "{{cv_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Duplicate CV",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"CV Copy for Startup\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/cv/{{cv_id}}/duplicate",
+              "host": ["{{baseUrl}}"],
+              "path": ["cv", "{{cv_id}}", "duplicate"]
+            }
+          }
+        },
+        {
+          "name": "Set Default CV",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/cv/{{cv_id}}/default",
+              "host": ["{{baseUrl}}"],
+              "path": ["cv", "{{cv_id}}", "default"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "CV Sections",
+      "item": [
+        {
+          "name": "Get CV Sections",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/cv/{{cv_id}}/sections",
+              "host": ["{{baseUrl}}"],
+              "path": ["cv", "{{cv_id}}", "sections"]
+            }
+          }
+        },
+        {
+          "name": "Reorder Sections",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"order\": [\n    { \"section_id\": \"uuid1\", \"order\": 1 },\n    { \"section_id\": \"uuid2\", \"order\": 2 },\n    { \"section_id\": \"uuid3\", \"order\": 3 }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/cv/{{cv_id}}/sections/order",
+              "host": ["{{baseUrl}}"],
+              "path": ["cv", "{{cv_id}}", "sections", "order"]
+            }
+          }
+        },
+        {
+          "name": "Add Custom Section",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Publications\",\n  \"content\": {\n    \"items\": [\n      {\n        \"title\": \"Distributed Systems at Scale\",\n        \"journal\": \"ACM Computing\",\n        \"year\": \"2023\"\n      }\n    ]\n  },\n  \"order\": 6\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/cv/{{cv_id}}/sections/custom",
+              "host": ["{{baseUrl}}"],
+              "path": ["cv", "{{cv_id}}", "sections", "custom"]
+            }
+          }
+        },
+        {
+          "name": "Toggle Section Visibility",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"visible\": false\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/cv/{{cv_id}}/sections/:sectionId/visibility",
+              "host": ["{{baseUrl}}"],
+              "path": ["cv", "{{cv_id}}", "sections", ":sectionId", "visibility"],
+              "variable": [
+                {
+                  "key": "sectionId",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

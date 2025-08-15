@@ -22,36 +22,36 @@ export class ProfileResponseDto {
 
   @ApiProperty({ description: 'Profile last updated timestamp' })
   @Transform(({ value }) => value?.toISOString())
-  updated_at: string;
+  updated_at!: string;
 }
 
 export class UserResponseDto {
   @ApiProperty({ description: 'User unique identifier' })
-  id: string;
+  id!: string;
 
   @ApiProperty({ description: 'User email address' })
-  email: string;
+  email!: string;
 
   @ApiProperty({ description: 'User full name' })
-  name: string;
+  name!: string;
 
   @ApiProperty({ description: 'User role' })
-  role: string;
+  role!: string;
 
   @ApiPropertyOptional({ description: 'OAuth provider used for authentication' })
   oauth_provider?: string;
 
   @ApiProperty({ description: 'Account creation timestamp' })
   @Transform(({ value }) => value?.toISOString())
-  created_at: string;
+  created_at!: string;
 
   @ApiProperty({ description: 'Profile information' })
   profile?: ProfileResponseDto;
 
   // Exclude sensitive fields from response
   @Exclude()
-  oauth_id: string;
+  oauth_id!: string;
 
   @Exclude()
-  deleted_at: Date;
+  deleted_at!: Date;
 }

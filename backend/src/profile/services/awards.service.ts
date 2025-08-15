@@ -49,14 +49,14 @@ export class AwardsService {
   ): Promise<Award> {
     const award = await this.findOne(id, userId);
 
-    const updateData: any = {
-      ...updateAwardDto,
+    const { date_received, ...rest } = updateAwardDto;
+    const updateData: Partial<Award> = {
+      ...rest,
     };
-
     if (updateAwardDto.date_received !== undefined) {
       updateData.date_received = updateAwardDto.date_received 
         ? new Date(updateAwardDto.date_received) 
-        : null;
+        : undefined;
     }
 
     Object.assign(award, updateData);

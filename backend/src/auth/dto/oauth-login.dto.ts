@@ -5,22 +5,22 @@ export class OAuthLoginDto {
   @ApiProperty({ description: 'User email from OAuth provider' })
   @IsEmail()
   @IsNotEmpty()
-  email: string;
+  email!: string;
 
   @ApiProperty({ description: 'User name from OAuth provider' })
   @IsString()
   @IsNotEmpty()
-  name: string;
+  name!: string;
 
   @ApiProperty({ description: 'OAuth provider (github, linkedin)' })
   @IsString()
   @IsNotEmpty()
-  oauth_provider: string;
+  oauth_provider!: string;
 
   @ApiProperty({ description: 'OAuth provider user ID' })
   @IsString()
   @IsNotEmpty()
-  oauth_id: string;
+  oauth_id!: string;
 
   @ApiProperty({ description: 'NextAuth session token', required: false })
   @IsString()

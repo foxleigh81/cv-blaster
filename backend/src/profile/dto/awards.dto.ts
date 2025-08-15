@@ -6,7 +6,7 @@ export class CreateAwardDto {
   @ApiProperty({ description: 'Award title/name' })
   @IsString()
   @MaxLength(255)
-  title: string;
+  title!: string;
 
   @ApiPropertyOptional({ description: 'Award issuing organization' })
   @IsOptional()
@@ -34,10 +34,10 @@ export class UpdateAwardDto extends PartialType(CreateAwardDto) {}
 
 export class AwardResponseDto {
   @ApiProperty({ description: 'Award ID' })
-  id: string;
+  id!: string;
 
   @ApiProperty({ description: 'Award title/name' })
-  title: string;
+  title!: string;
 
   @ApiPropertyOptional({ description: 'Award issuing organization' })
   issuer?: string;
@@ -52,10 +52,10 @@ export class AwardResponseDto {
   url?: string;
 
   @ApiProperty({ description: 'Creation timestamp' })
-  created_at: string;
+  created_at!: string;
 
   @ApiProperty({ description: 'Last update timestamp' })
-  updated_at: string;
+  updated_at!: string;
 }
 
 export class BulkAwardsDto {
@@ -64,5 +64,5 @@ export class BulkAwardsDto {
     type: [CreateAwardDto]
   })
   @Type(() => CreateAwardDto)
-  awards: CreateAwardDto[];
+  awards!: CreateAwardDto[];
 }

@@ -5,14 +5,14 @@ import { User } from '../../users/entities/user.entity';
 @Entity('skills')
 export class Skill extends BaseEntity {
   @Column({ unique: true })
-  name: string;
+  name!: string;
 
   @Column({ nullable: true })
-  category: string;
+  category!: string;
 
   @Column({ type: 'text', nullable: true })
-  description: string;
+  description!: string;
 
   @ManyToMany(() => User, { cascade: true })
-  users: User[];
+  users!: User[];
 }

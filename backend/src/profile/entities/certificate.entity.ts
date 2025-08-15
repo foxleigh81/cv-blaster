@@ -5,30 +5,30 @@ import { User } from '../../users/entities/user.entity';
 @Entity('certificates')
 export class Certificate extends BaseEntity {
   @Column({ type: 'uuid' })
-  user_id: string;
+  user_id!: string;
 
   @Column()
-  name: string;
+  name!: string;
 
   @Column({ nullable: true })
-  issuer: string;
+  issuer!: string;
 
   @Column({ type: 'date', nullable: true })
-  issue_date: Date;
+  issue_date!: Date;
 
   @Column({ type: 'date', nullable: true })
-  expiry_date: Date;
+  expiry_date!: Date;
 
   @Column({ nullable: true })
-  credential_id: string;
+  credential_id!: string;
 
   @Column({ nullable: true })
-  credential_url: string;
+  credential_url!: string;
 
   @Column({ type: 'text', nullable: true })
-  description: string;
+  description!: string;
 
   @ManyToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
-  user: User;
+  user!: User;
 }

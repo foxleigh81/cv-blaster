@@ -6,12 +6,12 @@ export class CreateEducationDto {
   @ApiProperty({ description: 'Educational institution name' })
   @IsString()
   @MaxLength(255)
-  institution: string;
+  institution!: string;
 
   @ApiProperty({ description: 'Degree obtained' })
   @IsString()
   @MaxLength(255)
-  degree: string;
+  degree!: string;
 
   @ApiPropertyOptional({ description: 'Field of study' })
   @IsOptional()
@@ -46,13 +46,13 @@ export class UpdateEducationDto extends PartialType(CreateEducationDto) {}
 
 export class EducationResponseDto {
   @ApiProperty({ description: 'Education record ID' })
-  id: string;
+  id!: string;
 
   @ApiProperty({ description: 'Educational institution name' })
-  institution: string;
+  institution!: string;
 
   @ApiProperty({ description: 'Degree obtained' })
-  degree: string;
+  degree!: string;
 
   @ApiPropertyOptional({ description: 'Field of study' })
   field?: string;
@@ -67,10 +67,10 @@ export class EducationResponseDto {
   gpa?: number;
 
   @ApiProperty({ description: 'Creation timestamp' })
-  created_at: string;
+  created_at!: string;
 
   @ApiProperty({ description: 'Last update timestamp' })
-  updated_at: string;
+  updated_at!: string;
 }
 
 export class BulkEducationDto {
@@ -79,5 +79,5 @@ export class BulkEducationDto {
     type: [CreateEducationDto]
   })
   @Type(() => CreateEducationDto)
-  education: CreateEducationDto[];
+  education!: CreateEducationDto[];
 }

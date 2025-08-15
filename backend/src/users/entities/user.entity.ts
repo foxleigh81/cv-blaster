@@ -6,23 +6,24 @@ import { Education } from '../../profile/entities/education.entity';
 import { Certificate } from '../../profile/entities/certificate.entity';
 import { Award } from '../../profile/entities/award.entity';
 import { UserSkill } from '../../profile/entities/user-skill.entity';
+import { UserPreferences } from '../../types';
 
 @Entity('users')
 export class User extends BaseEntity {
   @Column({ unique: true })
-  email: string;
+  email!: string;
 
   @Column()
-  name: string;
+  name!: string;
 
   @Column({ default: 'user' })
-  role: string;
+  role!: string;
 
-  @Column({ nullable: true })
-  oauth_provider: string;
+  @Column({ type: 'varchar', nullable: true })
+  oauth_provider!: string | null;
 
-  @Column({ nullable: true })
-  oauth_id: string;
+  @Column({ type: 'varchar', nullable: true })
+  oauth_id!: string | null;
 
   @Column({ 
     type: 'jsonb', 
@@ -34,23 +35,23 @@ export class User extends BaseEntity {
       "timezone": "UTC"
     }'::jsonb`
   })
-  preferences: Record<string, any>;
+  preferences!: UserPreferences;
 
   @OneToOne(() => Profile, (profile) => profile.user, { cascade: true })
-  profile: Profile;
+  profile!: Profile;
 
   @OneToMany(() => Employment, (employment) => employment.user)
-  employment_history: Employment[];
+  employment_history!: Employment[];
 
   @OneToMany(() => Education, (education) => education.user)
-  education: Education[];
+  education!: Education[];
 
   @OneToMany(() => Certificate, (certificate) => certificate.user)
-  certificates: Certificate[];
+  certificates!: Certificate[];
 
   @OneToMany(() => Award, (award) => award.user)
-  awards: Award[];
+  awards!: Award[];
 
   @OneToMany(() => UserSkill, (userSkill) => userSkill.user)
-  user_skills: UserSkill[];
+  user_skills!: UserSkill[];
 }

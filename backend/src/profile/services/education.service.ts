@@ -49,14 +49,14 @@ export class EducationService {
   ): Promise<Education> {
     const education = await this.findOne(id, userId);
 
-    const updateData: any = {
-      ...updateEducationDto,
+    const { graduation_date, ...rest } = updateEducationDto;
+    const updateData: Partial<Education> = {
+      ...rest,
     };
-
     if (updateEducationDto.graduation_date !== undefined) {
       updateData.graduation_date = updateEducationDto.graduation_date 
         ? new Date(updateEducationDto.graduation_date) 
-        : null;
+        : undefined;
     }
 
     Object.assign(education, updateData);
