@@ -28,15 +28,8 @@ Desktop.ini
 
 # python
 
-# Byte-compiled / optimized / DLL files
-backend/__pycache__/
-backend/**/*.py[cod]
-backend/**/*.pyo
-backend/**/*.pyd
-backend/*$py.class
 
-# C extensions
-backend/**/*.so
+
 
 # Distribution / packaging
 backend/.Python

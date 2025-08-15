@@ -2,29 +2,40 @@
 
 services:
   backend:
-    build: ./backend
-    container_name: backend
+    build:
+      context: ./backend
+      target: development
+    container_name: cv-blaster-backend
     restart: unless-stopped
     ports:
-      - '8000:8000'
+      - '5001:5001'
     environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
-      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      - NODE_ENV=development
+      - PORT=5001
+      - DATABASE_HOST=db
+      - DATABASE_PORT=5432
+      - DATABASE_USER=cvblaster
+      - DATABASE_PASSWORD=password
+      - DATABASE_NAME=cv_blaster
+      - JWT_SECRET=dev_jwt_secret_change_in_production
+      - JWT_EXPIRATION=7d
+      - NEXTAUTH_SECRET=dev_nextauth_secret_change_in_production
+      - CORS_ORIGIN=http://localhost:3000
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     volumes:
       - ./backend:/app
+      - /app/node_modules
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:8000/health || exit 1"]
+      test: ["CMD-SHELL", "curl -f http://localhost:5001/api/health || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 5
 
   frontend:
     build: ./frontend
-    container_name: frontend
+    container_name: cv-blaster-frontend
     restart: unless-stopped
     ports:
       - '3000:3000'
@@ -35,17 +46,22 @@ services:
       - /app/node_modules
 
   db:
-    image: postgres:13
-    container_name: db
+    image: postgres:15-alpine
+    container_name: cv-blaster-db
     restart: unless-stopped
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres
+      POSTGRES_USER: cvblaster
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: cv_blaster
     ports:
       - '5432:5432'
     volumes:
       - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cvblaster -d cv_blaster"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   db-data:
